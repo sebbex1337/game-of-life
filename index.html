@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Game of Life</title>
+    <style>
+      table {
+        border-collapse: collapse;
+      }
+      td {
+        width: 10px;
+        height: 10px;
+        border: 1px solid #ccc;
+      }
+      .alive {
+        background-color: black;
+      }
+      .dead {
+        background-color: white;
+      }
+    </style>
+  </head>
+  <body>
+    <button id="start-btn">Start</button>
+    <button id="stop-btn">Stop</button>
+    <button id="reset-btn">Reset</button>
+    <div id="game-container"></div>
+    <script type="module" src="main.js"></script>
+  </body>
+</html>

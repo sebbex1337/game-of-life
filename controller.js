@@ -1,5 +1,5 @@
-import * as model from "./model.js";
-import * as view from "./view.js";
+import { init, nextGeneration, grid, setGenerationCount } from "./model.js";
+import { renderGrid } from "./view.js";
 
 let intervalId;
 
@@ -10,8 +10,8 @@ document.getElementById("clear-btn").addEventListener("click", clearGrid);
 
 function startGame() {
   intervalId = setInterval(() => {
-    model.nextGeneration();
-    view.renderGrid(grid);
+    nextGeneration();
+    renderGrid(grid);
   }, 100);
 }
 
@@ -20,16 +20,16 @@ function stopGame() {
 }
 
 function randomizeGrid() {
-  model.grid.fill(() => Math.random() < 0.2);
-  view.renderGrid(grid);
+  grid.fill(() => Math.random() < 0.2);
+  renderGrid(grid);
 }
 
 function clearGrid() {
-  model.grid.fill(false);
-  model.setGenerationCount(0);
-  view.renderGrid(grid);
+  grid.fill(false);
+  setGenerationCount(0);
+  renderGrid(grid);
 }
 
-model.init(20, 20);
+init(20, 20);
 randomizeGrid();
-view.renderGrid(grid);
+renderGrid(grid);

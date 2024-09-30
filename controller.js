@@ -30,6 +30,7 @@ function clearGrid() {
   renderGrid(grid);
 }
 
+// Initial setup
 init(20, 20);
 randomizeGrid();
 renderGrid(grid);

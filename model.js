@@ -12,6 +12,10 @@ function createGrid(rows, cols) {
   grid = new Grid(rows, cols);
 }
 
+export function setGenerationCount(count) {
+  generationCount = count;
+}
+
 export function decideCellState(isAlive, neighbours) {
   const aliveNeighbours = neighbours.filter((neighbour) => neighbour).length;
   if (isAlive) {
@@ -40,8 +44,4 @@ export function nextGeneration() {
   }
   grid = newGrid;
   generationCount++;
-}
-
-export function setGenerationCount(count) {
-  generationCount = count;
 }

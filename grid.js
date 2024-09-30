@@ -1,22 +1,20 @@
 export class Grid {
-  constructor(rowOrObj, cols) {
-    const { row: rows, col: columns } = this.parseRowCol(rowOrObj, cols);
+  constructor(rows, cols) {
     this.rows = rows;
-    this.cols = columns;
-    this.grid = Array.from({ length: rows }, () => Array(columns).fill(null));
+    this.cols = cols;
+    this.grid = Array.from({ length: rows }, () => Array(cols).fill(false));
   }
 
   parseRowCol(rowOrObj, col) {
     if (typeof rowOrObj === "object") {
-      return { row: rowOrObj.row, col: rowOrObj.col };
+      return rowOrObj;
     }
     return { row: rowOrObj, col };
   }
 
   set(rowOrObj, colOrValue, value) {
     const { row, col } = this.parseRowCol(rowOrObj, colOrValue);
-    const val = value !== undefined ? value : colOrValue;
-    this.grid[row][col] = val;
+    this.grid[row][col] = value;
   }
 
   get(rowOrObj, col) {
@@ -37,81 +35,76 @@ export class Grid {
 
   neighbours(rowOrObj, col) {
     const { row, col: column } = this.parseRowCol(rowOrObj, col);
-    const neighbours = [];
-    if (row > 0) {
-      neighbours.push({ row: row - 1, column }); // Check up
-    }
-    if (row < this.rows - 1) {
-      neighbours.push({ row: row + 1, column }); // Check Down
-    }
-    if (column > 0) {
-      neighbours.push({ row, col: column - 1 }); // Check Left
-    }
-    if (column < this.cols - 1) {
-      neighbours.push({ row, col: column + 1 }); // Check Right
-    }
-    return neighbours;
+    return [
+      this.north(row, column),
+      this.south(row, column),
+      this.west(row, column),
+      this.east(row, column),
+      this.northWest(row, column),
+      this.northEast(row, column),
+      this.southWest(row, column),
+      this.southEast(row, column),
+    ].filter(Boolean);
   }
 
   neighbourValues(rowOrObj, col) {
-    const { row, col: column } = this.parseRowCol(rowOrObj, col);
-    return this.neighbours(row, column).map(({ row, col }) => this.get(row, col));
+    return this.neighbours(rowOrObj, col).map(({ row, col }) => this.get(row, col));
   }
 
-  nextInRow(rowOrObj, col) {
-    const { row, col: column } = this.parseRowCol(rowOrObj, col);
-    if (column < this.cols - 1) {
-      return { row, col: column + 1 };
-    }
-    return undefined;
-  }
-
-  nextInCol(rowOrObj, col) {
-    const { row, col: column } = this.parseRowCol(rowOrObj, col);
-    if (row < this.rows - 1) {
-      return { row: row + 1, column };
-    }
-    return undefined;
-  }
-
-  north(rowOrObj, col) {
-    const { row, col: column } = this.parseRowCol(rowOrObj, col);
+  north(row, col) {
     if (row > 0) {
-      return { row: row - 1, column };
+      return { row: row - 1, col };
     }
     return undefined;
   }
 
-  south(rowOrObj, col) {
-    const { row, col: column } = this.parseRowCol(rowOrObj, col);
+  south(row, col) {
     if (row < this.rows - 1) {
-      return { row: row + 1, column };
+      return { row: row + 1, col };
     }
     return undefined;
   }
 
-  west(rowOrObj, col) {
-    const { row, col: column } = this.parseRowCol(rowOrObj, col);
-    if (column > 0) {
-      return { row, col: column - 1 };
+  west(row, col) {
+    if (col > 0) {
+      return { row, col: col - 1 };
     }
     return undefined;
   }
 
-  east(rowOrObj, col) {
-    const { row, col: column } = this.parseRowCol(rowOrObj, col);
-    if (column < this.cols - 1) {
-      return { row, col: column + 1 };
+  east(row, col) {
+    if (col < this.cols - 1) {
+      return { row, col: col + 1 };
     }
     return undefined;
   }
 
-  rows() {
-    return this.rows;
+  northWest(row, col) {
+    if (row > 0 && col > 0) {
+      return { row: row - 1, col: col - 1 };
+    }
+    return undefined;
   }
 
-  cols() {
-    this.cols;
+  northEast(row, col) {
+    if (row > 0 && col < this.cols - 1) {
+      return { row: row - 1, col: col + 1 };
+    }
+    return undefined;
+  }
+
+  southWest(row, col) {
+    if (row < this.rows - 1 && col > 0) {
+      return { row: row + 1, col: col - 1 };
+    }
+    return undefined;
+  }
+
+  southEast(row, col) {
+    if (row < this.rows - 1 && col < this.cols - 1) {
+      return { row: row + 1, col: col + 1 };
+    }
+    return undefined;
   }
 
   size() {
@@ -121,7 +114,7 @@ export class Grid {
   fill(value) {
     for (let row = 0; row < this.rows; row++) {
       for (let col = 0; col < this.cols; col++) {
-        this.set(row, col, value);
+        this.grid[row][col] = typeof value === "function" ? value() : value;
       }
     }
   }

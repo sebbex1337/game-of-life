@@ -5,27 +5,45 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Game of Life</title>
     <style>
-      table {
+      #game-container {
+        display: inline-block;
+        margin: 20px;
+      }
+
+      #game-grid {
         border-collapse: collapse;
       }
-      td {
-        width: 10px;
-        height: 10px;
-        border: 1px solid #ccc;
+
+      #game-grid td {
+        width: 20px;
+        height: 20px;
+        border: 1px solid #ddd;
       }
+
       .alive {
         background-color: black;
       }
+
       .dead {
         background-color: white;
+      }
+
+      #controls {
+        margin-top: 20px;
       }
     </style>
   </head>
   <body>
-    <button id="start-btn">Start</button>
-    <button id="stop-btn">Stop</button>
-    <button id="reset-btn">Reset</button>
-    <div id="game-container"></div>
-    <script type="module" src="main.js"></script>
+    <div id="controls">
+      <button id="start-btn">Start</button>
+      <button id="stop-btn">Stop</button>
+      <button id="randomize-btn">Randomize cells</button>
+      <button id="clear-btn">Reset</button>
+      <p>Generations: <span id="generation-count">0</span></p>
+    </div>
+    <div id="game-container">
+      <table id="game-grid"></table>
+    </div>
+    <script type="module" src="controller.js"></script>
   </body>
 </html>
